@@ -1,22 +1,23 @@
 "use client";
 
 import logo from "@/assets/svgs/logo.svg";
+import HForm from "@/components/Forms/HForm";
+import HInput from "@/components/Forms/HInput";
 import { userLogin } from "@/services/actions/userLogin";
 import { storeUserInfo } from "@/services/auth.service";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
+
+export const loginValidationSchema = z.object({
+  email: z.string().email("Please enter a valid email address!"),
+  password: z.string().min(6, "Must be at least 6 characters"),
+});
 
 export type TUserLogin = {
   email: string;
@@ -25,13 +26,8 @@ export type TUserLogin = {
 
 const LoginPage = () => {
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<TUserLogin>();
-  const onSubmit: SubmitHandler<TUserLogin> = async (values) => {
+
+  const onSubmit = async (values: FieldValues) => {
     try {
       const res = await userLogin(values);
 
@@ -82,26 +78,29 @@ const LoginPage = () => {
 
           {/* form  */}
           <Box>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <HForm
+              onSubmit={onSubmit}
+              resolver={zodResolver(loginValidationSchema)}
+              defaultValues={{
+                email: "",
+                password: "",
+              }}
+            >
               <Grid container spacing={2} my={1}>
                 <Grid item sm={6} xs={12}>
-                  <TextField
+                  <HInput
+                    name="email"
                     label="Email"
                     type="email"
-                    variant="outlined"
-                    size="small"
                     fullWidth={true}
-                    {...register("email")}
                   />
                 </Grid>
                 <Grid item sm={6} xs={12}>
-                  <TextField
+                  <HInput
+                    name="password"
                     label="Password"
                     type="password"
-                    variant="outlined"
-                    size="small"
                     fullWidth={true}
-                    {...register("password")}
                   />
                 </Grid>
               </Grid>
@@ -135,7 +134,7 @@ const LoginPage = () => {
                   <Link href="/register">Create an account</Link>
                 </Box>
               </Typography>
-            </form>
+            </HForm>
           </Box>
           {/* form  */}
         </Box>

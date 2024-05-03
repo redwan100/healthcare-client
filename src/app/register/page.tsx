@@ -1,44 +1,46 @@
 "use client";
 import logo from "@/assets/svgs/logo.svg";
+import HForm from "@/components/Forms/HForm";
+import HInput from "@/components/Forms/HInput";
 import { registerPatient } from "@/services/actions/registerPatient";
+import { userLogin } from "@/services/actions/userLogin";
+import { storeUserInfo } from "@/services/auth.service";
 import modifyPayload from "@/utils/modifyPayload";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
 
-type TPatientData = {
-  name: string;
-  email: string;
-  password: string;
-  contactNumber: string;
-  address: string;
-};
+export const patientRegisterValidationSchema = z.object({
+  name: z.string().min(1, "please enter your name!"),
+  email: z.string().email("please enter your email address"),
+  contactNumber: z.string().min(11, "please enter your contact number"),
+  address: z.string().min(1, "please enter your address"),
+});
 
-export type TPatientRegisterFormData = {
-  password: string;
-  patient: TPatientData;
+export const validationSchema = z.object({
+  password: z.string().min(6, "please provide at least 6 characters "),
+  patient: patientRegisterValidationSchema,
+});
+
+const defaultValues = {
+  password: "",
+  patient: {
+    name: "",
+    email: "",
+    contactNumber: "",
+    address: "",
+  },
 };
 
 const RegisterPage = () => {
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<TPatientRegisterFormData>();
-  const onSubmit: SubmitHandler<TPatientRegisterFormData> = async (values) => {
+
+  const handleRegister = async (values: FieldValues) => {
     const data = modifyPayload(values);
 
     try {
@@ -46,9 +48,18 @@ const RegisterPage = () => {
 
       if (res?.data?.createdPatientData?.id) {
         toast.success(res?.message);
-        router.push("/login");
+
+        const result = await userLogin({
+          email: values.patient.email,
+          password: values.password,
+        });
+
+        if (result?.success) {
+          storeUserInfo(result?.data?.accessToken);
+          router.push("/");
+        }
       } else {
-        toast.error(res?.message + "change email or other value");
+        toast.error("change email or other value");
       }
     } catch (error: any) {
       console.log(error?.message);
@@ -90,56 +101,44 @@ const RegisterPage = () => {
 
           {/* form  */}
           <Box>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <HForm
+              onSubmit={handleRegister}
+              resolver={zodResolver(validationSchema)}
+              defaultValues={defaultValues}
+            >
               <Grid container spacing={2} my={1}>
                 <Grid item xs={12}>
-                  <TextField
-                    label="Name"
-                    type="text"
-                    variant="outlined"
-                    size="small"
-                    fullWidth={true}
-                    {...register("patient.name")}
-                  />
+                  <HInput label="Name" fullWidth={true} name="patient.name" />
                 </Grid>
                 <Grid item sm={6} xs={12}>
-                  <TextField
+                  <HInput
                     label="Email"
                     type="email"
-                    variant="outlined"
-                    size="small"
                     fullWidth={true}
-                    {...register("patient.email")}
+                    name="patient.email"
                   />
                 </Grid>
                 <Grid item sm={6} xs={12}>
-                  <TextField
+                  <HInput
                     label="Password"
                     type="password"
-                    variant="outlined"
-                    size="small"
                     fullWidth={true}
-                    {...register("password")}
+                    name="password"
                   />
                 </Grid>
                 <Grid item sm={6} xs={12}>
-                  <TextField
+                  <HInput
                     label="Contact Number"
                     type="tel"
-                    variant="outlined"
-                    size="small"
                     fullWidth={true}
-                    {...register("patient.contactNumber")}
+                    name="patient.contactNumber"
                   />
                 </Grid>
                 <Grid item sm={6} xs={12}>
-                  <TextField
+                  <HInput
                     label="Address"
-                    type="text"
-                    variant="outlined"
-                    size="small"
                     fullWidth={true}
-                    {...register("patient.address")}
+                    name="patient.address"
                   />
                 </Grid>
               </Grid>
@@ -166,7 +165,7 @@ const RegisterPage = () => {
                   </Link>
                 </Box>
               </Typography>
-            </form>
+            </HForm>
           </Box>
           {/* form  */}
         </Box>

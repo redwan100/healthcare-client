@@ -1,22 +1,14 @@
 "use client";
 
-import { getUserInfo, isLoggedIn, removeUser } from "@/services/auth.service";
-import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import { Box, Container, Stack, Typography } from "@mui/material";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 const Navbar = () => {
-  const router = useRouter();
-  const userInfo = getUserInfo();
-  const isLogged = isLoggedIn();
-
-  const logout = () => {
-    removeUser();
-    toast.success("successfully logout");
-    router.push("/login");
-  };
-
+  const AuthButton = dynamic(
+    () => import("@/components/UI/HomePage/AuthButton/AuthButton"),
+    { ssr: false }
+  );
   return (
     <Container>
       <Stack
@@ -42,23 +34,7 @@ const Navbar = () => {
           <Typography>NGOs</Typography>
         </Stack>
 
-        {isLogged ? (
-          <Button
-            sx={{
-              backgroundColor: "red",
-              "&:hover": {
-                backgroundColor: "red",
-              },
-            }}
-            onClick={logout}
-          >
-            Log out
-          </Button>
-        ) : (
-          <Button LinkComponent={Link} href="/login">
-            Login
-          </Button>
-        )}
+        <AuthButton />
       </Stack>
     </Container>
   );

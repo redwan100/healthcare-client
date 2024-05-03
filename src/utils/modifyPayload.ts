@@ -1,6 +1,4 @@
-import { TPatientRegisterFormData } from "@/app/register/page";
-
-const modifyPayload = (values: TPatientRegisterFormData) => {
+const modifyPayload = (values: any) => {
   const obj = { ...values };
   const data = JSON.stringify(obj);
   const formData = new FormData();
