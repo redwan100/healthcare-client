@@ -34,7 +34,12 @@ const Footer = () => {
           <Image src={instagram} alt="instagram" width={30} height={30} />
         </Stack>
 
-        <div className=" border-[1px] border-dashed my-5"></div>
+        <Box
+          sx={{
+            border: "1px dashed lightgray",
+            my: 2,
+          }}
+        ></Box>
 
         <Stack
           direction="row"
