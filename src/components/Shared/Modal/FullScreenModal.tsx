@@ -1,48 +1,46 @@
-"use client";
-
 import CloseIcon from "@mui/icons-material/Close";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
+import { DialogContent, DialogTitle } from "@mui/material";
+import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import { SxProps, styled } from "@mui/material/styles";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
 import * as React from "react";
+import { BootstrapDialog, TModalProps } from "./Modal";
 
-export const BootstrapDialog:any = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
-    padding: theme.spacing(2),
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement;
   },
-  "& .MuiDialogActions-root": {
-    padding: theme.spacing(1),
-  },
-}));
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
-export type TModalProps = {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  title: string;
-  children: React.ReactNode;
-  sx?: SxProps;
-};
-
-export default function Modal({
+export default function HFullScreenModal({
   open = false,
   setOpen,
-  title='',
+  title = "",
   children,
   sx,
 }: TModalProps) {
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
 
+ 
+
   return (
     <React.Fragment>
+     
       <BootstrapDialog
-        onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
+        fullScreen
         open={open}
-        sx={{ ...sx }}
+        onClose={handleClose}
+        TransitionComponent={Transition}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
           {title}
