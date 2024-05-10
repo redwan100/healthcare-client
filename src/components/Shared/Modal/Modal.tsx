@@ -8,7 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import { SxProps, styled } from "@mui/material/styles";
 import * as React from "react";
 
-export const BootstrapDialog:any = styled(Dialog)(({ theme }) => ({
+export const BootstrapDialog: any = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
   },
@@ -20,7 +20,7 @@ export const BootstrapDialog:any = styled(Dialog)(({ theme }) => ({
 export type TModalProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  title: string;
+  title?: string;
   children: React.ReactNode;
   sx?: SxProps;
 };
@@ -28,7 +28,7 @@ export type TModalProps = {
 export default function Modal({
   open = false,
   setOpen,
-  title='',
+  title = "",
   children,
   sx,
 }: TModalProps) {

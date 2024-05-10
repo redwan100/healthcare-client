@@ -4,14 +4,29 @@ import {
   useDeleteDoctorMutation,
   useGetAllDoctorQuery,
 } from "@/redux/api/doctorApi";
+import { useDebounce } from "@/redux/hooks";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, Button, IconButton, Stack, TextField } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useState } from "react";
+import { toast } from "sonner";
 import DoctorModal from "./components/DoctorModal";
 const DoctorsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const { data, isLoading } = useGetAllDoctorQuery({});
+
+  const query: Record<string, any> = {};
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  const debouncedTerm = useDebounce({
+    searchQuery: searchTerm,
+    delay: 700,
+  });
+
+  if (!!debouncedTerm) {
+    query["searchTerm"] = searchTerm;
+  }
+
+  const { data, isLoading } = useGetAllDoctorQuery({ ...query });
   const [deleteDoctor] = useDeleteDoctorMutation();
 
   const doctors = data?.doctors?.data;
@@ -20,8 +35,11 @@ const DoctorsPage = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await deleteDoctor(id);
-      console.log(res);
+      const res = await deleteDoctor(id).unwrap();
+      // TODO: implement toast
+      if (res?.id) {
+        toast.success("Doctor deleted successfully!");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -39,8 +57,8 @@ const DoctorsPage = () => {
       flex: 1,
     },
     {
-      field: "designation",
-      headerName: "Designation",
+      field: "contactNumber",
+      headerName: "Contact Number",
       flex: 1,
     },
     {
@@ -58,6 +76,7 @@ const DoctorsPage = () => {
       },
     },
   ];
+
   return (
     <Box>
       <Stack
@@ -67,7 +86,11 @@ const DoctorsPage = () => {
       >
         <Button onClick={() => setIsModalOpen(true)}>Create Doctor</Button>
         <DoctorModal open={isModalOpen} setOpen={setIsModalOpen} />
-        <TextField size="small" placeholder="search doctor" />
+        <TextField
+          onChange={(e) => setSearchTerm(e.target.value)}
+          size="small"
+          placeholder="search doctor"
+        />
       </Stack>
 
       {!isLoading ? (

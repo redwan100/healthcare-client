@@ -1,8 +1,20 @@
+"use client";
+
+import { Box, Button } from "@mui/material";
+import { useState } from "react";
+import ScheduleModal from "./components/ScheduleModal";
 
 const SchedulesPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
-    <div>SchedulesPage</div>
-  )
-}
+    <Box>
+      <Button onClick={() => setIsModalOpen(true)}>Create Schedule</Button>
 
-export default SchedulesPage
+      <ScheduleModal open={isModalOpen} setOpen={setIsModalOpen} />
+
+      <Box my={2}>Display Schedule</Box>
+    </Box>
+  );
+};
+
+export default SchedulesPage;
