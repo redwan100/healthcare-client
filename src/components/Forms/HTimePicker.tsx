@@ -1,11 +1,12 @@
 import { SxProps } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import dayjs from "dayjs";
+
 import { Controller, useFormContext } from "react-hook-form";
 
-type TDatePickerProps = {
+type TTimePickerProps = {
   name: string;
   size?: "small" | "medium";
   label?: string;
@@ -14,16 +15,15 @@ type TDatePickerProps = {
   sx?: SxProps;
 };
 
-const HDatePicker = ({
+const HTimePicker = ({
   name,
   size,
   label,
   required,
   fullWidth = true,
   sx,
-}: TDatePickerProps) => {
+}: TTimePickerProps) => {
   const { control } = useFormContext();
-
   return (
     <Controller
       name={name}
@@ -32,13 +32,12 @@ const HDatePicker = ({
       render={({ field: { onChange, value, ...field } }) => {
         return (
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DesktopDatePicker
+            <TimePicker
               label={label}
               timezone="system"
-              disablePast
               {...field}
-              onChange={(date) => onChange(date)}
               value={value || Date.now()}
+              onChange={(time) => onChange(time)}
               slotProps={{
                 textField: {
                   required: required,
@@ -58,4 +57,4 @@ const HDatePicker = ({
   );
 };
 
-export default HDatePicker;
+export default HTimePicker;

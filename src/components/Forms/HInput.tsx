@@ -17,7 +17,7 @@ const HInput = ({
   label,
   type = "text",
   size = "small",
-  fullWidth,
+  fullWidth = true,
   sx,
   placeholder,
   required,
