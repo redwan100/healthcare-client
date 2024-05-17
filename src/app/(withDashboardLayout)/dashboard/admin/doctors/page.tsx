@@ -6,11 +6,14 @@ import {
 } from "@/redux/api/doctorApi";
 import { useDebounce } from "@/redux/hooks";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { Box, Button, IconButton, Stack, TextField } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import DoctorModal from "./components/DoctorModal";
+
 const DoctorsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -36,7 +39,7 @@ const DoctorsPage = () => {
   const handleDelete = async (id: string) => {
     try {
       const res = await deleteDoctor(id).unwrap();
-      // TODO: implement toast
+
       if (res?.id) {
         toast.success("Doctor deleted successfully!");
       }
@@ -69,9 +72,23 @@ const DoctorsPage = () => {
       align: "center",
       renderCell: ({ row }) => {
         return (
-          <IconButton aria-label="delete" onClick={() => handleDelete(row?.id)}>
-            <DeleteIcon />
-          </IconButton>
+          <Box>
+            <IconButton
+              aria-label="delete"
+              onClick={() => handleDelete(row?.id)}
+              sx={{
+                color: "red",
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+
+            <Link href={`/dashboard/admin/doctors/edit/${row.id}`}>
+              <IconButton aria-label="edit" color="primary">
+                <EditIcon />
+              </IconButton>
+            </Link>
+          </Box>
         );
       },
     },

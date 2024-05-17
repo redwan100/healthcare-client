@@ -1,3 +1,5 @@
+"use client";
+
 import DashboardDrawer from "@/components/Dashboard/DashboardDrawer/DashboardDrawer";
 import { isLoggedIn } from "@/services/auth.service";
 import { useRouter } from "next/navigation";

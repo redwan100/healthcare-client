@@ -22,6 +22,7 @@ const SchedulesPage = () => {
   const schedules = data?.schedules?.data;
   const meta = data?.schedules?.meta;
 
+
   const deletedSchedule = async (id: string) => {
     const res = await deleteSchedule(id);
 
@@ -34,10 +35,10 @@ const SchedulesPage = () => {
     const updateData = schedules?.map((schedule: any) => {
       return {
         id: schedule?.id,
-        startDate: dateFormatter(schedule?.createdAt),
-        endDate: dateFormatter(schedule?.updatedAt),
-        startTime: dayjs(schedule?.startTime).format("hh:mm a"),
-        endTime: dayjs(schedule?.endTime).format("hh:mm a"),
+        startDate: dateFormatter(schedule?.startDateTime),
+        endDate: dateFormatter(schedule?.endDateTime),
+        startTime: dayjs(schedule?.startDateTime).format("hh:mm a"),
+        endTime: dayjs(schedule?.endDateTime).format("hh:mm a"),
       };
     });
 

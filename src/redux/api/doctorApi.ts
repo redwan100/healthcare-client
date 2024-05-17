@@ -5,6 +5,7 @@ import { baseApi } from "./baseApi";
 
 const doctorApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
+    // create doctor
     createDoctor: build.mutation({
       query: (data) => ({
         url: "/user/create-doctor",
@@ -16,11 +17,12 @@ const doctorApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.doctor],
     }),
 
+    // get all doctor
     getAllDoctor: build.query({
-      query: (arg:Record<string,any>) => ({
+      query: (arg: Record<string, any>) => ({
         url: "/doctor",
         method: "GET",
-        params:arg
+        params: arg,
       }),
 
       transformResponse: (response: TDoctor[], meta: TMeta) => {
@@ -32,12 +34,32 @@ const doctorApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.doctor],
     }),
 
+    // delete doctor
     deleteDoctor: build.mutation({
       query: (id) => ({
         url: `/doctor/soft/${id}`,
         method: "DELETE",
       }),
 
+      invalidatesTags: [tagTypes.doctor],
+    }),
+
+    // get single doctor
+    getDoctor: build.query({
+      query: (id: string | string[] | undefined) => ({
+        url: `/doctor/${id}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.doctor],
+    }),
+
+    // update doctor
+    updateDoctor: build.mutation({
+      query: (payload) => ({
+        url: `/doctor/${payload.id}`,
+        method: "PATCH",
+        data: payload.body,
+      }),
       invalidatesTags: [tagTypes.doctor],
     }),
   }),
@@ -47,4 +69,6 @@ export const {
   useCreateDoctorMutation,
   useGetAllDoctorQuery,
   useDeleteDoctorMutation,
+  useGetDoctorQuery,
+  useUpdateDoctorMutation,
 } = doctorApi;
