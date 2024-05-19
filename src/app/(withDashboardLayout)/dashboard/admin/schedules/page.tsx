@@ -16,12 +16,11 @@ import ScheduleModal from "./components/ScheduleModal";
 const SchedulesPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [allSchedule, setAllSchedule] = useState<any>([]);
-  const { data, isLoading } = useGetAllScheduleQuery({});
   const [deleteSchedule] = useDeleteScheduleMutation();
+  const { data, isLoading } = useGetAllScheduleQuery({});
 
   const schedules = data?.schedules?.data;
   const meta = data?.schedules?.meta;
-
 
   const deletedSchedule = async (id: string) => {
     const res = await deleteSchedule(id);

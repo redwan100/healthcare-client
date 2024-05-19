@@ -46,13 +46,13 @@ const doctorScheduleApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.doctorSchedule],
     }),
 
-    deleteDoctorSchedule: build.query({
+    deleteDoctorSchedule: build.mutation({
       query: (id: string) => ({
         url: `/doctor-schedule/${id}`,
         method: "DELETE",
       }),
 
-      providesTags: [tagTypes.doctorSchedule],
+      invalidatesTags: [tagTypes.doctorSchedule],
     }),
   }),
 });
@@ -62,5 +62,5 @@ export const {
   useGetAllDoctorSchedulesQuery,
   useGetDoctorScheduleQuery,
   useGetMyScheduleQuery,
-  useDeleteDoctorScheduleQuery,
+  useDeleteDoctorScheduleMutation,
 } = doctorScheduleApi;
