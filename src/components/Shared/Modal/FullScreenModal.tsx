@@ -1,6 +1,5 @@
 import CloseIcon from "@mui/icons-material/Close";
 import { DialogContent, DialogTitle } from "@mui/material";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
@@ -31,11 +30,8 @@ export default function HFullScreenModal({
     setOpen(false);
   };
 
- 
-
   return (
     <React.Fragment>
-     
       <BootstrapDialog
         fullScreen
         open={open}

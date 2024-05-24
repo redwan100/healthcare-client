@@ -11,7 +11,13 @@ import TryIcon from "@mui/icons-material/Try";
 
 const drawerItems = (role: TUserRole): TDrawerItem[] => {
   const roleMenus: TDrawerItem[] = [];
-
+  const defaultMenus = [
+    {
+      title: "Profile",
+      path: `${role}/profile`,
+      icon: GroupIcon,
+    },
+  ];
   switch (role) {
     case USER_ROLE.SUPER_ADMIN:
       roleMenus.push(
@@ -107,7 +113,7 @@ const drawerItems = (role: TUserRole): TDrawerItem[] => {
       break;
   }
 
-  return [...roleMenus];
+  return [...roleMenus, ...defaultMenus];
 };
 
 export default drawerItems;

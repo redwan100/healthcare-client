@@ -60,7 +60,7 @@ const doctorApi = baseApi.injectEndpoints({
         method: "PATCH",
         data: payload.body,
       }),
-      invalidatesTags: [tagTypes.doctor],
+      invalidatesTags: [tagTypes.doctor, tagTypes.user],
     }),
   }),
 });
