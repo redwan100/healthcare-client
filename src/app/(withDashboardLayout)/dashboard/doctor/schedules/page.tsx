@@ -1,29 +1,38 @@
 "use client";
 
-import {
-  useGetAllDoctorSchedulesQuery
-} from "@/redux/api/doctorScheduleApi";
+import { useGetAllDoctorSchedulesQuery } from "@/redux/api/doctorScheduleApi";
 import { dateFormatter } from "@/utils/dateFormtter";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Box, Button, IconButton } from "@mui/material";
+import { Box, Button, IconButton, Pagination } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import DoctorScheduleModal from "./components/DoctorScheduleModal";
 
 const SchedulePage = () => {
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [openIsModal, setOpenIsModal] = useState(false);
-
   const [allSchedule, setAllSchedule] = useState<any>([]);
-  const { data, isLoading } = useGetAllDoctorSchedulesQuery({});
- 
+
+  let query: Record<string, any> = {};
+  query["page"] = page;
+  query["limit"] = limit;
+
+  const { data, isLoading } = useGetAllDoctorSchedulesQuery({ ...query });
+
   const schedules = data?.doctorSchedules;
+  const meta = data?.meta;
+  let pageCount: number | any;
+  if (meta?.total) {
+    pageCount = Math.ceil(meta.total / limit);
+  }
 
   useEffect(() => {
     const updateData = schedules?.map((schedule: any) => {
       return {
-        id: schedule?.doctorId,
+        id: schedule?.scheduleId,
         startDate: dateFormatter(schedule?.schedule?.startDateTime),
         startTime: dayjs(schedule?.schedule?.startDateTime).format("hh:mm a"),
         endTime: dayjs(schedule?.schedule?.endDateTime).format("hh:mm a"),
@@ -32,8 +41,6 @@ const SchedulePage = () => {
 
     setAllSchedule(updateData);
   }, [schedules]);
-
-  
 
   const columns: GridColDef[] = [
     {
@@ -61,7 +68,8 @@ const SchedulePage = () => {
           <Box>
             <IconButton
               aria-label="delete"
-              onClick={() => deleteSchedule(row?.id)}
+              // TODO: implement later
+              // onClick={() => deleteSchedule(row?.id)}
             >
               <DeleteIcon sx={{ color: "red" }} />
             </IconButton>
@@ -70,6 +78,11 @@ const SchedulePage = () => {
       },
     },
   ];
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
   return (
     <Box>
       <Button
@@ -82,7 +95,29 @@ const SchedulePage = () => {
 
       {!isLoading ? (
         <Box my={2}>
-          <DataGrid rows={allSchedule ?? []} columns={columns} />
+          <DataGrid
+            rows={allSchedule ?? []}
+            columns={columns}
+            hideFooterPagination
+            slots={{
+              footer: () => (
+                <Box
+                  sx={{
+                    mb: 2,
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Pagination
+                    count={pageCount as number}
+                    page={page}
+                    onChange={handleChange}
+                    color="primary"
+                  />
+                </Box>
+              ),
+            }}
+          />
         </Box>
       ) : (
         <h1>Loading...</h1>

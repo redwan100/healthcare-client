@@ -1,4 +1,5 @@
 import { authKey } from "@/constant/authKey";
+import setAccessToken from "@/services/actions/setAccessToken";
 import { getNewAccessToken } from "@/services/auth.service";
 import { TGenericErrorResponse, TResponseSuccess } from "@/types";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
@@ -45,13 +46,13 @@ instance.interceptors.response.use(
 
     const config = error.config;
 
-    
     if (error?.response?.status === 500 && !config.send) {
-      config.send=true
+      config.send = true;
       const response = await getNewAccessToken();
       const accessToken = response?.data?.accessToken;
       config.headers["Authorization"] = accessToken;
       setToLocalStorage(authKey, accessToken);
+      setAccessToken(accessToken);
       return instance(config);
     } else {
       const responseObject: TGenericErrorResponse = {
@@ -66,4 +67,3 @@ instance.interceptors.response.use(
 );
 
 export { instance };
-

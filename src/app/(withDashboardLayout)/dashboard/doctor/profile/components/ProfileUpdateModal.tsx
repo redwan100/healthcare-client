@@ -3,8 +3,8 @@ import HInput from "@/components/Forms/HInput";
 import HFullScreenModal from "@/components/Shared/Modal/FullScreenModal";
 import HSelect from "@/components/Shared/Modal/HSelect";
 import {
-  useGetDoctorQuery,
-  useUpdateDoctorMutation,
+    useGetDoctorQuery,
+    useUpdateDoctorMutation,
 } from "@/redux/api/doctorApi";
 import { useGetAllSpecialtyQuery } from "@/redux/api/specialtiesApi";
 import { Gender } from "@/types";
@@ -129,14 +129,7 @@ const ProfileUpdateModal = ({ open = false, setOpen, id }: ProfileProps) => {
           <Grid item xs={12} sm={12} md={4}>
             <HInput name="address" label="Address" sx={{ mb: 2 }} fullWidth />
           </Grid>
-          <Grid item xs={12} sm={12} md={4}>
-            <HInput
-              name="registrationNumber"
-              label="Registration Number"
-              sx={{ mb: 2 }}
-              fullWidth
-            />
-          </Grid>
+         
           <Grid item xs={12} sm={12} md={4}>
             <HInput
               name="experience"

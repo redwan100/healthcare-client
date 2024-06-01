@@ -6,10 +6,18 @@ import HInput from "@/components/Forms/HInput";
 import { userLogin } from "@/services/actions/userLogin";
 import { storeUserInfo } from "@/services/auth.service";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Container,
+  Grid,
+  Stack,
+  Typography,
+} from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -25,7 +33,11 @@ export type TUserLogin = {
 };
 
 const LoginPage = () => {
-  const router = useRouter();
+  const [checked, setChecked] = useState<boolean>(false);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
 
   const onSubmit = async (values: FieldValues) => {
     try {
@@ -34,7 +46,6 @@ const LoginPage = () => {
       if (res?.success) {
         toast.success(res.message);
         storeUserInfo(res?.data?.accessToken);
-        router.push("/dashboard");
       } else {
         toast.success(res.message);
       }
@@ -99,11 +110,19 @@ const LoginPage = () => {
                   <HInput
                     name="password"
                     label="Password"
-                    type="password"
+                    type={checked ? "text" : "password"}
                     fullWidth={true}
                   />
                 </Grid>
               </Grid>
+              <Box>
+                <Checkbox
+                  checked={checked}
+                  onChange={handleChange}
+                  inputProps={{ "aria-label": "controlled" }}
+                />{" "}
+                show password
+              </Box>
               <Typography
                 component={"p"}
                 sx={{
