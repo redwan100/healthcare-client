@@ -123,15 +123,19 @@ const LoginPage = () => {
                 />{" "}
                 show password
               </Box>
-              <Typography
-                component={"p"}
-                sx={{
-                  textAlign: "right",
-                  mb: 1,
-                }}
-              >
-                Forgot Password?
-              </Typography>
+
+              <Link href="/forgot-password">
+                <Typography
+                  component={"p"}
+                  sx={{
+                    textAlign: "right",
+                    mb: 1,
+                  }}
+                >
+                  Forgot Password?
+                </Typography>
+              </Link>
+
               <Button
                 fullWidth={true}
                 sx={{
