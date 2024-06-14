@@ -12,6 +12,7 @@ import Image from "next/image";
 
 import doctorImg from "@/assets/doctor-image1.png";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import Link from "next/link";
 
 const TopRatedDoctors = async () => {
   const res = await fetch("http://localhost:5000/api/v1/doctor?page=1&limit=3");
@@ -65,7 +66,7 @@ const TopRatedDoctors = async () => {
         }}
       >
         <Grid container spacing={2}>
-          {doctors.data.map((doctor: any) => (
+          {doctors?.data?.map((doctor: any) => (
             <Grid item key={doctor.id} md={4}>
               <Card sx={{ maxWidth: 345 }}>
                 <Box
@@ -100,11 +101,13 @@ const TopRatedDoctors = async () => {
                   <Typography variant="body2" color="text.secondary">
                     {doctor.qualification},{doctor.designation}
                   </Typography>
-                  <Box sx={{
-                    marginTop:'10px',
-                    color: "#222",
-                    fontSize:"16px"
-                  }}>
+                  <Box
+                    sx={{
+                      marginTop: "10px",
+                      color: "#222",
+                      fontSize: "16px",
+                    }}
+                  >
                     <LocationOnIcon /> {doctor.address}
                   </Box>
                 </CardContent>
@@ -142,7 +145,9 @@ const TopRatedDoctors = async () => {
             textAlign: "center",
           }}
         >
-          <Button variant="outlined">View All</Button>
+          <Button variant="outlined" component={Link} href="/doctors">
+            View All
+          </Button>
         </Box>
       </Container>
     </Box>

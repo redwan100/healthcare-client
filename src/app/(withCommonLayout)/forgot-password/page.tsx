@@ -1,3 +1,5 @@
+"use client";
+
 import HForm from "@/components/Forms/HForm";
 import HInput from "@/components/Forms/HInput";
 import { useForgotPasswordMutation } from "@/redux/api/authApi";

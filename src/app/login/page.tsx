@@ -6,6 +6,7 @@ import HInput from "@/components/Forms/HInput";
 import { userLogin } from "@/services/actions/userLogin";
 import { storeUserInfo } from "@/services/auth.service";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Label } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -129,7 +130,12 @@ const LoginPage = () => {
                   component={"p"}
                   sx={{
                     textAlign: "right",
+                    width: "max-content",
+                    marginLeft: "auto",
                     mb: 1,
+                    "&:hover": {
+                      textDecoration: "underline",
+                    },
                   }}
                 >
                   Forgot Password?
