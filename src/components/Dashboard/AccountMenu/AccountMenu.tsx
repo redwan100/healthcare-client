@@ -1,3 +1,4 @@
+import logoutUser from "@/services/actions/logoutUser";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Logout from "@mui/icons-material/Logout";
 import { MenuItem } from "@mui/material";
@@ -10,7 +11,6 @@ import Menu from "@mui/material/Menu";
 import Tooltip from "@mui/material/Tooltip";
 import { useRouter } from "next/navigation";
 import * as React from "react";
-
 const menuStyles = {
   paper: {
     elevation: 0,
@@ -51,8 +51,7 @@ export default function AccountMenu() {
   };
   const handleLogout = () => {
     setAnchorEl(null);
-    localStorage.removeItem("accessToken");
-    router.push("/login");
+    logoutUser(router);
   };
 
   return (

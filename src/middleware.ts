@@ -4,7 +4,11 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 const AuthRoutes = ["/register", "/login"];
-const commonPrivateRouts = ["/dashboard", "/dashboard/change-password"];
+const commonPrivateRouts = [
+  "/dashboard",
+  "/dashboard/change-password",
+  "doctors",
+];
 const roleBasedPrivateRouts = {
   PATIENT: [/^\/dashboard\/patient/],
   DOCTOR: [/^\/dashboard\/doctor/],
@@ -49,5 +53,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/register", "/dashboard/:page*"],
+  matcher: ["/login", "/register", "/dashboard/:page*", "/doctors/page*"],
 };
