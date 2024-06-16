@@ -30,7 +30,10 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  if (accessToken && commonPrivateRouts.includes(pathname)) {
+  if (
+    (accessToken && commonPrivateRouts.includes(pathname)) ||
+    commonPrivateRouts.some((route) => pathname.startsWith(route))
+  ) {
     return NextResponse.next();
   }
 
